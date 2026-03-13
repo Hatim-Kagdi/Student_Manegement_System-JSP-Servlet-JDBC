@@ -20,12 +20,14 @@ List<Course> cList = (List<Course>) request.getAttribute("courseList");
 <form action="<%= request.getContextPath()%>/addEnrollment" method="post">
 
 Student Name : <select name="studentId">
+<option value=""><--Select Option--></option>
 <% for(Student s : sList){ %>
 <option value="<%= s.getStudentId()%>"> <%= s.getStudentName() %> </option>
 <%} %>
 </select><br><br>
 
 Course Name : <select name="courseId">
+<option value=""><--Select Option--></option>
 <% for(Course c : cList){ %>
 <option value="<%= c.getCourseId()%>"> <%= c.getCourseName() %> </option>
 <%} %>

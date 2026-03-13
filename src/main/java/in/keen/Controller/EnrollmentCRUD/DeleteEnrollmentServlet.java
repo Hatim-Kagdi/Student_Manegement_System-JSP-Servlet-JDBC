@@ -1,26 +1,28 @@
 package in.keen.Controller.EnrollmentCRUD;
 
 import java.io.IOException;
-import java.util.List;
 
 import in.keen.DAO.EnrollmentDAO;
-import in.keen.Model.Enrollment;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/viewEnrollments")
-public class ViewEnrollmentServlet extends HttpServlet{
+@WebServlet("/deleteEnrollment")
+public class DeleteEnrollmentServlet extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		int id = Integer.parseInt(req.getParameter("enrollmentId"));
+		
 		EnrollmentDAO dao = new EnrollmentDAO();
 		
-		List<Enrollment> list = dao.getAllEnrollments();
+		boolean status = dao.deleteEnrollment(id);
 		
-		req.setAttribute("enrollmentList" , list);
-		
-		req.getRequestDispatcher("Enrollment/viewEnrollment.jsp").forward(req, resp);
+		if(status) {
+			resp.sendRedirect("viewEnrollments");
+		}else {
+			resp.getWriter().print("Delete Enrollment Failed");
+		}
 	}
 }

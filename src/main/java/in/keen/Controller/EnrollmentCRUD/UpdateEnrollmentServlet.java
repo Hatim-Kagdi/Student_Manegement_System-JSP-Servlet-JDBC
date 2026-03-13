@@ -10,29 +10,28 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/addEnrollment")
-public class AddNewEnrollment extends HttpServlet{
+@WebServlet("/updateEnrollment")
+public class UpdateEnrollmentServlet extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		int enrollmentId = Integer.parseInt(req.getParameter("enrollmentId"));
 		int studentId = Integer.parseInt(req.getParameter("studentId"));
 		int courseId = Integer.parseInt(req.getParameter("courseId"));
 		
-//		if(studentId == null || courseId == null) {
-//			resp.getWriter().print("Invalid Request.");
-//			return;
-//		}
+		Enrollment e = new Enrollment();
 		
-		Enrollment enrollment = new Enrollment();
-		enrollment.setCourseId(courseId);
-		enrollment.setStudentId(studentId);
+		e.setEnrollmentId(enrollmentId);
+		e.setStudentId(studentId);
+		e.setCourseId(courseId);
 		
 		EnrollmentDAO dao = new EnrollmentDAO();
-		boolean status = dao.addEnrollment(enrollment);
+		
+		boolean status = dao.updateEnrollment(e);
 		
 		if(status) {
 			resp.sendRedirect("viewEnrollments");
 		}else {
-			resp.getWriter().print("Enrollment failed!");
+			resp.getWriter().print("Update Failed");
 		}
 	}
 }
