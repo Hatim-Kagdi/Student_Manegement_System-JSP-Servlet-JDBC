@@ -3,7 +3,9 @@ package in.keen.Controller.TeacherCRUD;
 import java.io.IOException;
 
 import in.keen.DAO.TeacherDAO;
+import in.keen.DAO.UserDAO;
 import in.keen.Model.Teacher;
+import in.keen.Model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -23,7 +25,16 @@ public class AddTeacherServlet extends HttpServlet{
 		teacher.setTeacherEmail(email);
 		teacher.setTeacherDepartment(department);
 		
+		User user = new User();
+		user.setUserName(name);
+		user.setUserEmail(email);
+		user.setUserPassword("teacher");
+		user.setUserRole("teacher");
+		
 		TeacherDAO dao = new TeacherDAO();
+		
+		UserDAO udao = new UserDAO();
+		udao.registerUser(user);
 		
 		boolean status = dao.addTeacher(teacher);
 		

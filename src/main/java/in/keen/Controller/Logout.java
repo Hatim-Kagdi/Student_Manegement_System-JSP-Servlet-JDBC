@@ -19,6 +19,6 @@ public class Logout extends HttpServlet{
 			session.invalidate();
 		}
 		
-		resp.sendRedirect("DashBoard/login.html");
+		resp.sendRedirect(req.getContextPath() + "/login.html");
 	}
 }

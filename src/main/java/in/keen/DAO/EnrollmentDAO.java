@@ -134,4 +134,30 @@ public class EnrollmentDAO {
 		
 		return status;
 	}
+	
+	//Get Student by Id for courses 
+	public List<Enrollment> getCoursesByStudentId(int studentId){
+		List<Enrollment> list = new ArrayList<>();
+		
+		try {
+			Connection con = DBconnection.getConnection();
+			String query = "SELECT c.course_name, t.teachers_name FROM enrollments e JOIN courses c ON e.courses_id = c.course_id JOIN teachers t ON c.teacher_id = t.teachers_id WHERE e.student_id = ? AND e.is_deleted = false";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setInt(1, studentId);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				Enrollment e = new Enrollment();
+				e.setCourseName(rs.getString("course_name"));
+				e.setTeacherName(rs.getString("teachers_name"));
+				list.add(e);
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
 }

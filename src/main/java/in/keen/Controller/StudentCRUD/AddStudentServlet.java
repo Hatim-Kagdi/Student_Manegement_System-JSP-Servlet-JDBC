@@ -4,8 +4,10 @@ package in.keen.Controller.StudentCRUD;
 	import java.io.IOException;
 	import java.sql.Date;
 	import in.keen.DAO.StudentDAO;
-	import in.keen.Model.Student;
-	import jakarta.servlet.ServletException;
+import in.keen.DAO.UserDAO;
+import in.keen.Model.Student;
+import in.keen.Model.User;
+import jakarta.servlet.ServletException;
 	import jakarta.servlet.annotation.WebServlet;
 	import jakarta.servlet.http.HttpServlet;
 	import jakarta.servlet.http.HttpServletRequest;
@@ -28,6 +30,14 @@ package in.keen.Controller.StudentCRUD;
 			student.setStudentYear(year);
 			student.setStudentAddmissionYear(admissionDate);
 			
+			User user = new User();
+			user.setUserName(student.getStudentName());
+			user.setUserEmail(email);
+			user.setUserPassword("student");
+			user.setUserRole("student");
+			
+			UserDAO udao = new UserDAO();
+			udao.registerUser(user);
 		
 			StudentDAO dao = new StudentDAO();
 			boolean status = dao.addStudent(student);

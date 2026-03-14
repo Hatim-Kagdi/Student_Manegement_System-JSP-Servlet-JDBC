@@ -7,8 +7,15 @@ public class Enrollment {
 	
 	private String studentName;
 	private String courseName;
+	private String teacherName;
 	
 	
+	public String getTeacherName() {
+		return teacherName;
+	}
+	public void setTeacherName(String teacherName) {
+		this.teacherName = teacherName;
+	}
 	public int getEnrollmentId() {
 		return enrollmentId;
 	}

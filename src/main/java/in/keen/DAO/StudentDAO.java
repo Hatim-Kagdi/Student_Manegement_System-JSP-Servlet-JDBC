@@ -145,4 +145,29 @@ public class StudentDAO {
 			}
 			return status;
 		}
+		
+		//Get Student by user id
+		public int getStudentByUserId(int userId) {
+			
+			int studentId = 0;
+			
+			try {
+				Connection con = DBconnection.getConnection();
+				String query = "SELECT students_id FROM students WHERE user_id = ?";
+				PreparedStatement ps = con.prepareStatement(query);
+				
+				ps.setInt(1, userId);
+				
+				ResultSet rs = ps.executeQuery();
+				
+				if(rs.next()) {
+					studentId = rs.getInt("students_id");
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+			return studentId;
+			
+		}
 }
