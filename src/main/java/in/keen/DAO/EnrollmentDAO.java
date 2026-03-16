@@ -135,7 +135,7 @@ public class EnrollmentDAO {
 		return status;
 	}
 	
-	//Get Student by Id for courses 
+	//Get courses by Student Id
 	public List<Enrollment> getCoursesByStudentId(int studentId){
 		List<Enrollment> list = new ArrayList<>();
 		
@@ -154,6 +154,33 @@ public class EnrollmentDAO {
 				list.add(e);
 			}
 			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+	
+	
+	//Get Students by Course Id
+	public List<Enrollment> getStudentByCourseId(int courseId){
+		List<Enrollment> list = new ArrayList<>();
+		
+		try {
+			Connection con = DBconnection.getConnection();
+			String query = "SELECT s.students_id,s.students_name FROM enrollments e JOIN students s ON e.student_id = s.students_id WHERE e.courses_id = ? AND e.is_deleted = false";
+			PreparedStatement ps = con.prepareStatement(query);
+			
+			ps.setInt(1, courseId);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				Enrollment e = new Enrollment();
+				e.setStudentId(rs.getInt("students_id"));
+				e.setStudentName(rs.getString("students_name"));
+				list.add(e);
+			}
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

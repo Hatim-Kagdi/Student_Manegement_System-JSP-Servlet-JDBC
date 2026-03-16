@@ -140,4 +140,26 @@ public class TeacherDAO {
 		
 		return status;
 	}
+	
+	//Get Teacher By User id
+	public int getTeacherByUserId(int userId) {
+		int teacherId = 0;
+		
+		try {
+			Connection con = DBconnection.getConnection();
+			String query = "SELECT * FROM teachers WHERE user_id = ? AND is_deleted = false";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setInt(1, userId);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				teacherId = rs.getInt("teachers_id");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return teacherId;
+	}
 }

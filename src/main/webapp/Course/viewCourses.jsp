@@ -42,6 +42,7 @@ List<Teacher> tList = (List<Teacher>) request.getAttribute("teacherList");
 </tr>
 <%} %>
 </table>
-<button><a href="<%= request.getContextPath() %>/DashBoard/adminDashboard.jsp">Back</a></button>
+<br><br>
+<a href="<%= request.getContextPath() %>/DashBoard/adminDashboard.jsp"><button>Back</button></a>
 </body>
 </html>

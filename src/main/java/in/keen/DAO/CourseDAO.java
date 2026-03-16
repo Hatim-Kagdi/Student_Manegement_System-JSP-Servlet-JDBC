@@ -129,4 +129,29 @@ public class CourseDAO {
 		
 		return status;
 	}
+	
+	//Get Course by teacher id
+	public List<Course> getCoursesByTeacherId(int teacherId){
+		List<Course> list = new ArrayList<>();
+		
+		try {
+			Connection con = DBconnection.getConnection();
+			String query = "SELECT * FROM courses WHERE teacher_id = ? AND is_deleted = false";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setInt(1, teacherId);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				Course c = new Course();
+				c.setCourseId(rs.getInt("course_id"));
+				c.setCourseName(rs.getString("course_name"));
+				list.add(c);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
 }

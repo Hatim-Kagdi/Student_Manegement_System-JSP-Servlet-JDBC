@@ -47,7 +47,7 @@ if(!"admin".equals(user.getUserRole())){
 
 <br>
 
-<a href="<%= request.getContextPath() %>/logoutUser">Logout</a>
+<a href="<%= request.getContextPath() %>/logoutUser"><button>Logout</button></a>
 
 </body>
 </html>
