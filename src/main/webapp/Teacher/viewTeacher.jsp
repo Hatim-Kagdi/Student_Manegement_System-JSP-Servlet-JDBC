@@ -34,7 +34,7 @@
 <td><a href="deleteTeacher?teacherId=<%=t.getTeacherId()%>"><button>DELETE</button></a></td>
 </tr>
 <%} %>
-</table>
-<a href="<%= request.getContextPath() %>/DashBoard/adminDashboard.jsp">Back</a>
+</table><br>
+<a href="<%= request.getContextPath() %>/DashBoard/adminDashboard.jsp"><button>Back</button></a>
 </body>
 </html>

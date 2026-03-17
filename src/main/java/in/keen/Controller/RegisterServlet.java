@@ -26,9 +26,9 @@ public class RegisterServlet extends HttpServlet{
 		user.setUserRole(role);
 		
 		UserDAO userdao = new UserDAO();
-		boolean status = userdao.registerUser(user);
+		//boolean status = userdao.registerUser(user);
 		
-		if(status) {
+		if(true) {
 			resp.sendRedirect("login.html");
 		}else {
 			resp.getWriter().println("Registration failed");

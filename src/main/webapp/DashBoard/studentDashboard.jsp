@@ -30,8 +30,10 @@ if(!"student".equals(user.getUserRole())){
 <ul>
 <li>
 <a href="<%= request.getContextPath() %>/myCourses">View My Courses</a>
-</li>
-<br><br>
+</li> <br>
+<li>
+<a href="<%= request.getContextPath() %>/viewStudentAttendance">View Attendance</a>
+</li> <br>
 </ul>
 
 <a href="<%= request.getContextPath() %>/logoutUser"><button>Logout</button></a>

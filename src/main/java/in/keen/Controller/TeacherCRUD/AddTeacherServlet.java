@@ -31,17 +31,20 @@ public class AddTeacherServlet extends HttpServlet{
 		user.setUserPassword("teacher");
 		user.setUserRole("teacher");
 		
-		TeacherDAO dao = new TeacherDAO();
-		
 		UserDAO udao = new UserDAO();
-		udao.registerUser(user);
+		int userId = udao.registerUser(user);
 		
-		boolean status = dao.addTeacher(teacher);
+		if(userId > 0) {
+		TeacherDAO dao = new TeacherDAO();
+		boolean status = dao.addTeacher(teacher, userId);
 		
 		if(status) {
 			resp.sendRedirect("viewTeachers");
 		}else {
 			resp.getWriter().print("Add Teacher Failed!");
+		}
+		}else {
+			resp.getWriter().print("Data not added in Teacher table");
 		}
 	}
 }

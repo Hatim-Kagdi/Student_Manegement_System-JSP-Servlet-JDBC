@@ -41,6 +41,6 @@ for(Student s : students){
 }
 %>
 
-</table>
+</table><br><br>
 
-<a href="<%= request.getContextPath() %>/DashBoard/adminDashboard.jsp">Back</a>
+<a href="<%= request.getContextPath() %>/DashBoard/adminDashboard.jsp"><button>Back</button></a>

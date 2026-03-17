@@ -11,11 +11,11 @@ import in.keen.Model.Student;
 
 public class StudentDAO {
 	//Add New Student
-		public boolean addStudent(Student student) {
+		public boolean addStudent(Student student, int userId) {
 			boolean status = false;
 			
 			try {
-				String query = "INSERT INTO students(students_name, students_email, students_department, students_year,students_admission_year) VALUES (?,?,?,?,?)";
+				String query = "INSERT INTO students(students_name, students_email, students_department, students_year,students_admission_year,user_id) VALUES (?,?,?,?,?,?)";
 				Connection con = DBconnection.getConnection();
 				PreparedStatement ps = con.prepareStatement(query);
 				ps.setString(1, student.getStudentName());
@@ -23,6 +23,7 @@ public class StudentDAO {
 				ps.setString(3, student.getStudentDepartment());
 				ps.setInt(4, student.getStudentYear());
 				ps.setDate(5, student.getStudentAddmissionYear());
+				ps.setInt(6, userId);
 				
 				int addStudent = ps.executeUpdate();
 				

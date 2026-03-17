@@ -3,6 +3,7 @@ package in.keen.DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 import in.keen.Connection.DBconnection;
 import in.keen.Model.User;
@@ -10,13 +11,13 @@ import in.keen.Model.User;
 public class UserDAO {
 	
 	//Register User
-	public boolean registerUser(User user) {
-		boolean status = false;
+	public int registerUser(User user) {
+		int generatedId = 0;
 		
 		try {
 			String query = "INSERT INTO users(user_name, user_email, user_password, user_role) VALUES (?,?,?,?)";
 			Connection con = DBconnection.getConnection();
-			PreparedStatement ps = con.prepareStatement(query);
+			PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, user.getUserName());
 			ps.setString(2, user.getUserEmail());
 			ps.setString(3, user.getUserPassword());
@@ -24,15 +25,17 @@ public class UserDAO {
 			
 			int registerUser = ps.executeUpdate();
 			
-			if(registerUser > 0) {
-				status = true;
+			try(ResultSet rs = ps.getGeneratedKeys()){
+				if(rs.next()) {
+					generatedId = rs.getInt(1);
+				}
 			}
 			con.close();
 			ps.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		return status;
+		return generatedId;
 	}
 	
 	

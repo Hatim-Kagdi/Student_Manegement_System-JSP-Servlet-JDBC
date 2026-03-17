@@ -37,15 +37,19 @@ import jakarta.servlet.ServletException;
 			user.setUserRole("student");
 			
 			UserDAO udao = new UserDAO();
-			udao.registerUser(user);
-		
+			int userId = udao.registerUser(user);
+			
+			if(userId > 0){
 			StudentDAO dao = new StudentDAO();
-			boolean status = dao.addStudent(student);
+			boolean status = dao.addStudent(student, userId);
 			
 			if(status) {
 				resp.sendRedirect("DashBoard/adminDashboard.jsp");
 			}else {
 				resp.getWriter().print("Add new Student Failed!");
 			}
+			}else {
+				resp.getWriter().print("Data not added in Students Table");
+			}
 		}
-	}
+}
