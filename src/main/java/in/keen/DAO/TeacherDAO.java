@@ -163,4 +163,33 @@ public class TeacherDAO {
 		
 		return teacherId;
 	}
+	
+	//Search Teacher
+	public List<Teacher> searchTeacher(String query){
+		List<Teacher> list = new ArrayList<>();
+		
+		String sql = "SELECT * FROM teachers WHERE (teachers_id LIKE ? OR teachers_name LIKE ?) and is_deleted = false";
+		
+		try(Connection con = DBconnection.getConnection();
+				PreparedStatement ps = con.prepareStatement(sql)){
+			String wildCardQuery = "%"+query+"%";
+			
+			ps.setString(1, wildCardQuery);
+			ps.setString(2, wildCardQuery);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				Teacher t = new Teacher();
+				t.setTeacherId(rs.getInt("teachers_id"));
+				t.setTeacherName(rs.getString("teachers_name"));
+				t.setTeacherDepartment(rs.getString("teachers_department"));
+				t.setTeacherEmail(rs.getString("teachers_email"));
+				list.add(t);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

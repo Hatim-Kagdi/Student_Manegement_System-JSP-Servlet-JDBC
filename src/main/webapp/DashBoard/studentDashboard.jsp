@@ -4,7 +4,7 @@
 User user = (User) session.getAttribute("session_user");
 
 if(user == null){
-    response.sendRedirect(request.getContextPath()+"login.html");
+    response.sendRedirect(request.getContextPath()+"/login.html");
     return;
 }
 
@@ -17,12 +17,12 @@ if(!"student".equals(user.getUserRole())){
 <!DOCTYPE html>
 <html>
 <head>
-<title>Student Dashboard</title>
+<title>Student DashBoard</title>
 </head>
 
 <body>
 
-<h1>Student Dashboard</h1>
+<h1>Student DashBoard</h1>
 
 <h3>Welcome <%= user.getUserName() %></h3>
 
@@ -33,6 +33,9 @@ if(!"student".equals(user.getUserRole())){
 </li> <br>
 <li>
 <a href="<%= request.getContextPath() %>/viewStudentAttendance">View Attendance</a>
+</li> <br>
+<li>
+<a href="<%= request.getContextPath() %>/viewStudentMarks">View Marks</a>
 </li> <br>
 </ul>
 

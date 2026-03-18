@@ -33,6 +33,6 @@
 
 <br>
 
-<a href="<%= request.getContextPath() %>/DashBoard/studentDashboard.jsp"> Back </a>
+<a href="<%= request.getContextPath() %>/DashBoard/studentDashboard.jsp"><button>BACK</button></a>
 </body>
 </html>

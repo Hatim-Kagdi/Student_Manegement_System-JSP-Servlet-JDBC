@@ -21,7 +21,7 @@ public class EnrollStudentServlet extends HttpServlet{
 		CourseDAO courseDAO = new CourseDAO();
 		
 		List<Student> studentList = studentDAO.getAllStudents();
-		List<Course> courseList = courseDAO.getAllCourses();
+		List<Course> courseList = courseDAO.getAllCourseWithTeacher();
 		
 		req.setAttribute("courseList", courseList);
 		req.setAttribute("studentList", studentList);

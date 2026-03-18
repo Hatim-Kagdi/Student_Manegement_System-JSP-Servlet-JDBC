@@ -20,9 +20,5 @@ pageEncoding="UTF-8"%>
 
 <br><br>
 
-<a href="register.html">
-    <button>Register</button>
-</a>
-
 </body>
 </html>

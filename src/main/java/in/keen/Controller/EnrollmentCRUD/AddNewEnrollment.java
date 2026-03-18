@@ -17,11 +17,6 @@ public class AddNewEnrollment extends HttpServlet{
 		int studentId = Integer.parseInt(req.getParameter("studentId"));
 		int courseId = Integer.parseInt(req.getParameter("courseId"));
 		
-//		if(studentId == null || courseId == null) {
-//			resp.getWriter().print("Invalid Request.");
-//			return;
-//		}
-		
 		Enrollment enrollment = new Enrollment();
 		enrollment.setCourseId(courseId);
 		enrollment.setStudentId(studentId);

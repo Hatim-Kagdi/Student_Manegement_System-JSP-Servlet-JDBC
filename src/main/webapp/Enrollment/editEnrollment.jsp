@@ -30,8 +30,7 @@ Student Name :
 <option value="<%= s.getStudentId() %>"
 <%= s.getStudentId() == enrollment.getStudentId() ? "selected" : "" %>>
 
-<%= s.getStudentName() %>
-
+<%= s.getStudentName() %> 
 </option>
 
 <% } %>
@@ -47,7 +46,7 @@ Course Name :
 <option value="<%= c.getCourseId() %>"
 <%= c.getCourseId() == enrollment.getCourseId() ? "selected" : "" %>>
 
-<%= c.getCourseName() %>
+<%= c.getCourseName() %> — (Prof. <%= c.getTeacherName() %>)
 
 </option>
 

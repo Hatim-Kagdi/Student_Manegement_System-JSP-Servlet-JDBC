@@ -167,8 +167,35 @@ public class StudentDAO {
 			}catch(Exception e) {
 				e.printStackTrace();
 			}
-			
 			return studentId;
+		}
+		
+		//Search Students
+		public List<Student> searchStudent(String query){
+			List<Student> list = new ArrayList<>();
+			String sql = "SELECT * FROM students WHERE (students_name LIKE ? OR students_id LIKE ?) and is_deleted = false";
+			try(Connection con = DBconnection.getConnection();
+					PreparedStatement ps = con.prepareStatement(sql)){
+				String wildCardQuery = "%" + query + "%";
+				ps.setString(1, wildCardQuery);
+				ps.setString(2, wildCardQuery);
+				
+				ResultSet rs = ps.executeQuery();
+				
+				while(rs.next()) {
+					Student s = new Student();
+					s.setStudentId(rs.getInt("students_id"));
+					s.setStudentName(rs.getString("students_name"));
+					s.setStudentEmail(rs.getString("students_email"));
+					s.setStudentDepartment(rs.getString("students_department"));
+					s.setStudentYear(rs.getInt("students_year"));
+					s.setStudentAddmissionYear(rs.getDate("students_admission_year"));
+					list.add(s);
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
 			
+			return list;
 		}
 }

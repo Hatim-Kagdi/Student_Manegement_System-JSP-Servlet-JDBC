@@ -28,7 +28,7 @@ public class EditEnrollmentServlet extends HttpServlet{
 		
 		Enrollment enrollment = dao.getEnrollmentById(id);
 		List<Student> student = sdao.getAllStudents();
-		List<Course> course = cdao.getAllCourses();
+		List<Course> course = cdao.getAllCourseWithTeacher();
 		
 		req.setAttribute("enrollment", enrollment);
 		req.setAttribute("course", course);

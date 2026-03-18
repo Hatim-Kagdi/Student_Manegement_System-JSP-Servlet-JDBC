@@ -39,7 +39,7 @@ public class EnrollmentDAO {
 		try {
 			
 			Connection con = DBconnection.getConnection();
-			String query = "SELECT e.enrollment_id, s.students_name, c.course_name FROM enrollments e JOIN students s ON e.student_id = s.students_id JOIN courses c ON e.courses_id = c.course_id WHERE e.is_deleted = false AND s.is_deleted = false AND c.is_deleted = false";
+			String query = "SELECT e.enrollment_id, s.students_name, c.course_name ,t.teachers_name FROM enrollments e JOIN students s ON e.student_id = s.students_id JOIN courses c ON e.courses_id = c.course_id JOIN teachers t ON c.teacher_id = t.teachers_id WHERE e.is_deleted = false AND s.is_deleted = false AND c.is_deleted = false AND t.is_deleted = false";
 			PreparedStatement ps = con.prepareStatement(query);
 			
 			ResultSet rs = ps.executeQuery();
@@ -49,6 +49,7 @@ public class EnrollmentDAO {
 				e.setEnrollmentId(rs.getInt("enrollment_id"));
 				e.setStudentName(rs.getString("students_name"));
 				e.setCourseName(rs.getString("course_name"));
+				e.setTeacherName(rs.getString("teachers_name"));
 				list.add(e);
 			}
 			
@@ -186,5 +187,41 @@ public class EnrollmentDAO {
 		}
 		
 		return list;
+	}
+	
+	//Search Students
+	public List<Enrollment> searchEnrollment(String query){
+		List<Enrollment> list = new ArrayList<>();
+		String sql = "SELECT e.enrollment_id, s.students_name, c.course_name, t.teachers_name " +
+                "FROM enrollments e " +
+                "JOIN students s ON e.student_id = s.students_id " +
+                "JOIN courses c ON e.courses_id = c.course_id " +
+                "JOIN teachers t ON c.teacher_id = t.teachers_id " +
+                "WHERE(s.students_name LIKE ? OR c.course_name LIKE ? OR t.teachers_name LIKE ?)"
+                + "AND s.is_deleted = false AND c.is_deleted = false AND t.is_deleted = false";
+		
+		try(Connection con = DBconnection.getConnection();
+				PreparedStatement ps = con.prepareStatement(sql)){
+			String wild = "%" + query + "%";
+			ps.setString(1, wild);
+			ps.setString(2, wild);
+			ps.setString(3, wild);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				Enrollment e = new Enrollment();
+				e.setEnrollmentId(rs.getInt("enrollment_id"));
+				e.setStudentName(rs.getString("students_name"));
+				e.setCourseName(rs.getString("course_name"));
+				e.setTeacherName(rs.getString("teachers_name"));
+				list.add(e);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+		
 	}
 }

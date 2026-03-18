@@ -7,6 +7,12 @@ List<Student> students = (List<Student>) request.getAttribute("studentList");
 
 <h2>Student List</h2>
 
+<form action="<%= request.getContextPath() %>/searchStudents" method="get">
+    <input type="text" name="searchQuery" placeholder="Search by name or ID...">
+    <button type="submit">Search</button>
+    <a href="<%= request.getContextPath() %>/searchStudents"><button>Reset</button></a>
+</form>
+
 <table border="1">
 
 <tr>

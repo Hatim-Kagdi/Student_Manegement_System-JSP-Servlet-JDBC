@@ -14,6 +14,12 @@
 
 <h2>Teacher List</h2>
 
+<form action="<%= request.getContextPath()%>/searchTeacher" method="get">
+<input type="text" name="searchQuery" placeholder="Search by name or id...">
+<button type="submit"> Search</button>
+<a href="<%= request.getContextPath() %>/searchTeacher"><button>Reset</button></a>
+</form><br>
+
 <table border="1">
 <tr>
 <th>ID</th>

@@ -29,12 +29,13 @@ Student Name : <select name="studentId">
 Course Name : <select name="courseId">
 <option value=""><--Select Option--></option>
 <% for(Course c : cList){ %>
-<option value="<%= c.getCourseId()%>"> <%= c.getCourseName() %> </option>
+<option value="<%= c.getCourseId()%>"> <%= c.getCourseName() %> (Prof. : <%= c.getTeacherName() %>)</option>
 <%} %>
 </select>
 
 <button type = "submit">Add Enrollment</button>
 </form>
 
+<a href="<%= request.getContextPath()%>/DashBoard/adminDashboard.jsp"><button>Back</button></a>
 </body>
 </html>

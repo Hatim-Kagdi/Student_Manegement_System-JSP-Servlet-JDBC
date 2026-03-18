@@ -15,6 +15,13 @@
 List<Teacher> tList = (List<Teacher>) request.getAttribute("teacherList");
 %>
 <h3>Course List</h3>
+
+<form action="<%= request.getContextPath()%>/searchCourse" method="get">
+<input type="text" name="searchQuery" placeholder="Enter Course Id or name">
+<button type="submit">Search </button>
+<a href="<%= request.getContextPath()%>/searchCourse"><button>Reset</button></a>
+</form><br>
+
 <table border="1">
 
 <tr>

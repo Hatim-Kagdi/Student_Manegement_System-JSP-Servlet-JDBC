@@ -154,4 +154,60 @@ public class CourseDAO {
 		
 		return list;
 	}
+	
+	//Get all courses with Teachers
+	public List<Course> getAllCourseWithTeacher(){
+		List<Course> list = new ArrayList<>();
+		
+		String query = "SELECT c.*,u.user_name AS teacher_name FROM courses c JOIN teachers t ON c.teacher_id = t.teachers_id JOIN users u ON t.user_id = u.user_id";
+		
+		try(Connection con = DBconnection.getConnection();
+				PreparedStatement ps = con.prepareStatement(query)){
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				Course c = new Course();
+				c.setCourseId(rs.getInt("course_id"));
+				c.setCourseName(rs.getString("course_name"));
+				c.setTeacherName(rs.getString("teacher_name"));
+				list.add(c);
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+	
+	//Search Courses
+	
+	public List<Course> searchCourse(String query){
+		List<Course> list = new ArrayList<>();
+		
+		String sql = "SELECT * FROM courses WHERE (course_id LIKE ? OR course_name LIKE ?) AND is_deleted = false";
+		
+		try(Connection con = DBconnection.getConnection();
+				PreparedStatement ps = con.prepareStatement(sql)){
+			String wildquery = "%"+query+"%";
+			ps.setString(1, wildquery);
+			ps.setString(2, wildquery);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				Course c = new Course();
+				c.setCourseId(rs.getInt("course_id"));
+				c.setCourseName(rs.getString("course_name"));
+				c.setTeacherId(rs.getInt("teacher_id"));
+				list.add(c);
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
 }
