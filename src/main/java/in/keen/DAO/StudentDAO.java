@@ -198,4 +198,32 @@ public class StudentDAO {
 			
 			return list;
 		}
+		
+		public Student getStudentProfileByUserId(int userId) {
+			Student s = new Student();
+			String query = "SELECT s.*, u.user_password FROM students s JOIN users u ON s.user_id = u.user_id WHERE s.user_id = ? AND s.is_deleted = false";
+			
+			try(Connection con = DBconnection.getConnection();
+					PreparedStatement ps = con.prepareStatement(query)){
+				ps.setInt(1,userId);
+				
+				ResultSet rs = ps.executeQuery();
+				
+				while(rs.next()) {
+					s = new Student();
+					s.setStudentId(rs.getInt("students_id"));
+					s.setStudentName(rs.getString("students_name"));
+					s.setStudentEmail(rs.getString("students_email"));
+					s.setStudentDepartment(rs.getString("students_department"));
+					s.setStudentYear(rs.getInt("students_year"));
+					s.setStudentAddmissionYear(rs.getDate("students_admission_year"));
+					s.setStudentPassword(rs.getString("user_password"));
+				}
+				
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+			return s;
+		}
 }

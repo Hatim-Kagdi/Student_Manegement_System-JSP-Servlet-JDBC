@@ -192,4 +192,30 @@ public class TeacherDAO {
 		}
 		return list;
 	}
+	
+	//Get teacher for profile
+	public Teacher getTeacherProfileByUserId(int userId) {
+		Teacher t = null;
+		String query = "SELECT t.*, user_password FROM teachers t JOIN users u ON t.user_id = u.user_id WHERE t.user_id = ? AND t.is_deleted = false";
+		
+		try(Connection con = DBconnection.getConnection();
+				PreparedStatement ps = con.prepareStatement(query)){
+			ps.setInt(1, userId);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				t = new Teacher();
+				t.setTeacherId(rs.getInt("teachers_id"));
+				t.setTeacherName(rs.getString("teachers_name"));
+				t.setTeacherEmail(rs.getString("teachers_email"));
+				t.setTeacherDepartment(rs.getString("teachers_department"));
+				t.setTeacherPassword(rs.getString("user_password"));
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return t;
+	}
 }

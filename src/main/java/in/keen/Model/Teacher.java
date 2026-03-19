@@ -5,8 +5,14 @@ public class Teacher {
 	private String teacherName;
 	private String teacherEmail;
 	private String teacherDepartment;
+	private String teacherPassword;
 	
-	
+	public String getTeacherPassword() {
+		return teacherPassword;
+	}
+	public void setTeacherPassword(String teacherPassword) {
+		this.teacherPassword = teacherPassword;
+	}
 	public int getTeacherId() {
 		return teacherId;
 	}

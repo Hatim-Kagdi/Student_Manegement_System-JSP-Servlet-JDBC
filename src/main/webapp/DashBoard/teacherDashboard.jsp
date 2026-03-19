@@ -28,9 +28,11 @@ if(!"teacher".equals(user.getUserRole())){
 <hr>
 <ul>
 <li>
+<a href="<%= request.getContextPath()%>/viewTeacherProfile">View My Profile</a>
+</li><br>
+<li>
 <a href="<%= request.getContextPath()%>/teachersCourses">View My Courses</a>
-</li>
-<br>
+</li><br>
 <li>
 <a href="<%= request.getContextPath()%>/markAttendance">Mark Attendance</a>
 </li>

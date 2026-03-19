@@ -9,7 +9,15 @@ public class Student {
 	private String studentDepartment;
 	private int studentYear;
 	private Date studentAddmissionYear;
-	
+	private String studentPassword;
+
+	//Student Password
+	public String getStudentPassword() {
+		return studentPassword;
+	}
+	public void setStudentPassword(String studentPassword) {
+		this.studentPassword = studentPassword;
+	}
 	//Getter and Setters
 	public int getStudentId() {
 		return studentId;

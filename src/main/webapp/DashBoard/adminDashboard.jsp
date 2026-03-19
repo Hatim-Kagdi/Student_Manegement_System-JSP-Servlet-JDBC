@@ -3,15 +3,6 @@
 <%
 User user = (User) session.getAttribute("session_user");
 
-if(user == null){
-    response.sendRedirect(request.getContextPath() + "/login.html");
-    return;
-}
-
-if(!"admin".equals(user.getUserRole())){
-    response.sendRedirect(request.getContextPath() +"/login.html");
-    return;
-}
 %>
 
 <!DOCTYPE html>
@@ -31,6 +22,9 @@ if(!"admin".equals(user.getUserRole())){
 <h3>Management Panel</h3>
 
 <ul>
+
+<li><a href="<%= request.getContextPath() %>/Admin/viewAdminProfile.jsp">View My Profile</a></li>
+
 <li><a href="<%= request.getContextPath() %>/Student/addStudent.jsp">Add Student</a></li>
 <li><a href="<%= request.getContextPath() %>/viewStudents">View Students</a></li>
 

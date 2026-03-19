@@ -71,4 +71,44 @@ public class UserDAO {
 		}
 		return user;
 	}
+	
+	//Update User
+	public boolean updateUser(User user) {
+	boolean status =false;
+	String query = "UPDATE users SET user_name= ?,user_email = ?, user_password = ? WHERE user_ID = ?";
+	
+	try(Connection con = DBconnection.getConnection();
+			PreparedStatement ps = con.prepareStatement(query)){
+		ps.setString(1, user.getUserName());
+		ps.setString(2, user.getUserEmail());
+		ps.setString(3, user.getUserPassword());
+		ps.setInt(4, user.getUserId());
+		
+		if(ps.executeUpdate() > 0) {
+			status = true;
+		}
+		
+	}catch(Exception e) {
+		e.printStackTrace();
+	}
+	return status;
+	}
+	
+	//Update User Password
+	public boolean updateUserPassword(int userId, String newPass) {
+		boolean status = false;
+		String query = "UPDATE users SET user_password = ? WHERE user_id = ?";
+		try(Connection con = DBconnection.getConnection();
+				PreparedStatement ps = con.prepareStatement(query)){
+			ps.setString(1, newPass);
+			ps.setInt(2, userId);
+			
+			if(ps.executeUpdate() > 0) {
+				status = true;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return status;
+	}
 }

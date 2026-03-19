@@ -29,6 +29,9 @@ if(!"student".equals(user.getUserRole())){
 <hr>
 <ul>
 <li>
+<a href="<%= request.getContextPath() %>/studentProfile">View My Profile</a>
+</li> <br>
+<li>
 <a href="<%= request.getContextPath() %>/myCourses">View My Courses</a>
 </li> <br>
 <li>
