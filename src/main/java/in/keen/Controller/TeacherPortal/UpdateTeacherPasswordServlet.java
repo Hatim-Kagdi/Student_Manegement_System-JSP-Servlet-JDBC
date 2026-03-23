@@ -35,7 +35,7 @@ public class UpdateTeacherPasswordServlet extends HttpServlet{
 		String currentHashedPW = udao.getStoredHashedPassword(user.getUserId());
 		
 		if(BCrypt.checkpw(newPass, currentHashedPW)) {
-			resp.sendRedirect(req.getContextPath()+"/Teacher/editTeacherPassword.jsp?error=New and Old Password are same!");
+			resp.sendRedirect(req.getContextPath()+"/Teacher/editTeacherPassword.jsp?error=New and Old Password are same");
 			return;
 		}
 		
