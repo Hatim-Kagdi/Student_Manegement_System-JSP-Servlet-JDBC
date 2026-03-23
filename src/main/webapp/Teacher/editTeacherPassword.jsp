@@ -11,22 +11,28 @@
 
 <% User user = (User) session.getAttribute("session_user"); %>
 
-<form action="<%= request.getContextPath()%>/updateTeacherPassword" method="post">
+<h2>Edit Password</h2>
+<hr>
 
-<label> Current Password : <%= user.getUserPassword() %></label><br><br>
+<form action="<%= request.getContextPath()%>/updateTeacherPassword" method="post">
+<% if(request.getParameter("error") != null) { %>
+        <p style="color:red;"><%= request.getParameter("error") %></p>
+    <% } %>
+
+<label> Current Password :  ******** (Encrypted)</label><br><br>
 
 <label>New Password :</label>
-<input type="text" name="newPassword" required><br><br>
+<input type="text" name="newPassword" required placeholder="Enter new Password.."><br><br>
 
 <label>Confirm Password :</label>
-<input type="text" name="confirmPassword" required><br><br>
+<input type="text" name="confirmPassword" required placeholder="Confirm new Password.."><br><br>
 
 <button type="submit">Change Password</button>
  
 </form>
 <br><br>
 
-<a href="<%= request.getContextPath()%>/viewTeacherProfile"><button>CANCEL</button></a>
+<a href="<%= request.getContextPath()%>/viewTeacherProfile"><button> CANCEL </button></a>
 
 </body>
 </html>

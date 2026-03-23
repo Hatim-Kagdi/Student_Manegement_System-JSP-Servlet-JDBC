@@ -2,6 +2,8 @@ package in.keen.Controller.StudentPortal;
 
 import java.io.IOException;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import in.keen.DAO.UserDAO;
 import in.keen.Model.User;
 import jakarta.servlet.ServletException;
@@ -18,30 +20,32 @@ public class UpdateStudentPasswordServlet extends HttpServlet{
 		HttpSession session = req.getSession();
 		User user = (User) session.getAttribute("session_user");
 		
-		String oldPass = user.getUserPassword();
 		String newPass = req.getParameter("newPassword");
 		String confirmPass = req.getParameter("confirmPassword");
 		
 		//Validation Rules
 		
 		//Rule A
-		if(!newPass.equals(confirmPass)) {
-			resp.sendRedirect(req.getContextPath()+"/Student/editStudentPassword.jsp?error=New Passwords do not match!");
+		if(!newPass.equals(confirmPass) || newPass == null || confirmPass == null || newPass.isEmpty() || confirmPass.isEmpty()) {
+			resp.sendRedirect(req.getContextPath()+"/Student/editStudentPassword.jsp?error=New Passwords do not match and Field cannot be empty!");
 			return;
 		}
 		
 		//Rule B
-		if(oldPass.equals(newPass)) {
-			resp.sendRedirect(req.getContextPath()+"/Student/editStudentPassword.jsp?error=Old and New password are same.");
-			return;
-		}
-		
 		UserDAO udao = new UserDAO();
 		
-		boolean success = udao.updateUserPassword(user.getUserId() , newPass);
+		String currentHashedPW = udao.getStoredHashedPassword(user.getUserId());
+		
+		if(BCrypt.checkpw(newPass, currentHashedPW)) {
+			resp.sendRedirect(req.getContextPath() + "/Student/editStudentPassword.jsp?error=New password cannot be the same as the old password");
+            return;
+		}
+		
+		String newHashedPw = BCrypt.hashpw(newPass, BCrypt.gensalt());
+		
+		boolean success = udao.updateUserPassword(user.getUserId() , newHashedPw);
 		
 		if(success) {
-			user.setUserPassword(newPass);
 			session.setAttribute("session_user", user);
 			resp.sendRedirect(req.getContextPath()+"/studentProfile?msg=success");
 		}else {

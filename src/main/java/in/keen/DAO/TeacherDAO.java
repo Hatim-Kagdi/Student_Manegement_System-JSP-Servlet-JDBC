@@ -218,4 +218,55 @@ public class TeacherDAO {
 		
 		return t;
 	}
+	
+	
+	//Update Teacher Profile Fields in teachers and users table
+	public boolean updateTeacherProfileField(int teacherId, String fieldName, String value) {
+		boolean status = false;
+		Connection con = null;
+		String columnName = "";
+		String userColumn = "";
+		
+		if("name".equals(fieldName)) {
+			columnName = "teachers_name";
+			userColumn = "user_name";
+		}else if("email".equals(fieldName)) {
+			columnName = "teachers_email";
+			userColumn = "user_email";
+		}
+		
+		if(columnName.isEmpty()) return false;
+		
+		try {
+			con = DBconnection.getConnection();
+			con.setAutoCommit(false);
+			
+			String teacherQuery = "UPDATE teachers SET " + columnName + " = ? WHERE teachers_id = ?"; 
+			PreparedStatement ps1 = con.prepareStatement(teacherQuery);
+			ps1.setString(1, value);
+			ps1.setInt(2, teacherId);
+			int r1 = ps1.executeUpdate();
+			
+			String userQuery = "UPDATE users SET " + userColumn + " = ? WHERE user_id = (SELECT user_id FROM teachers WHERE teachers_id = ?)";
+			PreparedStatement ps2 = con.prepareStatement(userQuery);
+			ps2.setString(1, value);
+			ps2.setInt(2, teacherId);
+			int r2 = ps2.executeUpdate();
+			
+			if(r1 > 0 && r2 > 0) {
+				con.commit();
+				status = true;
+			}else {
+				con.rollback();
+			}
+			
+		}catch (Exception e) {
+	        try { if(con != null) con.rollback(); } catch(Exception ex) {}
+	        e.printStackTrace();
+	    } finally {
+	        try { if(con != null) con.close(); } catch(Exception ex) {}
+	    }
+		
+		return status;
+	}
 }

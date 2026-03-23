@@ -226,4 +226,53 @@ public class StudentDAO {
 			
 			return s;
 		}
+		
+		public boolean updateStudentField(int studentId, String fieldName, String newValue) {
+			Connection con = null;
+			boolean status = false;
+			String columnName = "";
+			String userColumn = "";
+			
+			if("name".equals(fieldName)) {
+				columnName = "students_name";
+				userColumn = "user_name";
+			}else if("email".equals(fieldName)) {
+				columnName = "students_email";
+				userColumn = "user_email";
+			}
+			
+			if(columnName.isEmpty()) return false;
+			
+			try{
+				con = DBconnection.getConnection();
+				con.setAutoCommit(false);
+				
+				String studentQuery = "UPDATE students SET " + columnName + " = ? WHERE students_id = ?";
+				PreparedStatement ps = con.prepareStatement(studentQuery);
+				ps.setString(1, newValue);
+				ps.setInt(2 , studentId);
+				int r1 = ps.executeUpdate();
+				
+				
+				String userQuery = "UPDATE users SET " + userColumn + " = ? WHERE user_id = (SELECT user_id FROM students WHERE students_id = ?)";
+				PreparedStatement ps2 = con.prepareStatement(userQuery);
+				ps2.setString(1 , newValue);
+				ps2.setInt(2 , studentId);
+				int r2 = ps2.executeUpdate();
+				
+				if(r1 > 0 && r2 > 0) {
+					con.commit();
+					status = true;
+				}else {
+					con.rollback();
+				}
+			}
+				catch (Exception e) {
+			        try { if(con != null) con.rollback(); } catch(Exception ex) {}
+			        e.printStackTrace();
+			    } finally {
+			        try { if(con != null) con.close(); } catch(Exception ex) {}
+			    }
+			    return status;
+		}
 }

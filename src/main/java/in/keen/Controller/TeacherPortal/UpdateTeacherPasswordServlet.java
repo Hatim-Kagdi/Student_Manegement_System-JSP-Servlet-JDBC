@@ -2,6 +2,8 @@ package in.keen.Controller.TeacherPortal;
 
 import java.io.IOException;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import in.keen.DAO.UserDAO;
 import in.keen.Model.User;
 import jakarta.servlet.ServletException;
@@ -19,30 +21,31 @@ public class UpdateTeacherPasswordServlet extends HttpServlet{
 		
 		User user = (User) session.getAttribute("session_user");
 		
-		String oldPass = user.getUserPassword();
 		String newPass = req.getParameter("newPassword");
 		String confirmPass = req.getParameter("confirmPassword");
 		
 		//Validation
 		
-		if(!newPass.equals(confirmPass)) {
+		if(!newPass.equals(confirmPass) || newPass == null || newPass.isEmpty() || confirmPass == null || confirmPass.isEmpty()) {
 			resp.sendRedirect(req.getContextPath() +"/Teacher/editTeacherPassword.jsp?error=New Password doesnt match!");
 			return;
 		}
 		
-		if(newPass.equals(oldPass)) {
+		UserDAO udao = new UserDAO(); 
+		String currentHashedPW = udao.getStoredHashedPassword(user.getUserId());
+		
+		if(BCrypt.checkpw(newPass, currentHashedPW)) {
 			resp.sendRedirect(req.getContextPath()+"/Teacher/editTeacherPassword.jsp?error=New and Old Password are same!");
 			return;
 		}
 		
-		UserDAO udao = new UserDAO();
+		String newHashedPW = BCrypt.hashpw(newPass, BCrypt.gensalt());
 		
-		boolean status = udao.updateUserPassword(user.getUserId(), newPass);
+		boolean status = udao.updateUserPassword(user.getUserId(), newHashedPW);
 		
 		if(status) {
-			user.setUserPassword(newPass);
 			session.setAttribute("session_user", user);
-			resp.sendRedirect(req.getContextPath()+"/viewTeacherProfile?msg=Success");
+			resp.sendRedirect(req.getContextPath()+"/viewTeacherProfile?msg=success");
 		}else {
 			resp.sendRedirect(req.getContextPath()+"/Teacher/editTeacherPassword.jsp?msg=Error in Database!");
 		}

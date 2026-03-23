@@ -3,7 +3,10 @@ package in.keen.Controller.StudentCRUD;
 
 	import java.io.IOException;
 	import java.sql.Date;
-	import in.keen.DAO.StudentDAO;
+
+import org.mindrot.jbcrypt.BCrypt;
+
+import in.keen.DAO.StudentDAO;
 import in.keen.DAO.UserDAO;
 import in.keen.Model.Student;
 import in.keen.Model.User;
@@ -22,6 +25,8 @@ import jakarta.servlet.ServletException;
 			String department = req.getParameter("department");
 			int year = Integer.parseInt(req.getParameter("year"));
 			Date admissionDate = Date.valueOf(req.getParameter("admissionDate"));
+			String plainTextPassword = "student";
+			String hashedPassword = BCrypt.hashpw(plainTextPassword , BCrypt.gensalt());
 			
 			Student student = new Student();
 			student.setStudentName(name);
@@ -33,7 +38,7 @@ import jakarta.servlet.ServletException;
 			User user = new User();
 			user.setUserName(student.getStudentName());
 			user.setUserEmail(email);
-			user.setUserPassword("student");
+			user.setUserPassword(hashedPassword);
 			user.setUserRole("student");
 			
 			UserDAO udao = new UserDAO();

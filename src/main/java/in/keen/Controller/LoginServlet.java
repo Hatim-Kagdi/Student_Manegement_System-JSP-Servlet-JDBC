@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet{
 			
 			//resp.sendRedirect("dashboard.jsp");
 		}else {
-			resp.getWriter().print("Login Failed");
+			resp.sendRedirect("login.jsp?error=Invalid email or password");
 		}
 	}
 }

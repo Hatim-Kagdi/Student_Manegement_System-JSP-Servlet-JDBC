@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import in.keen.Connection.DBconnection;
 import in.keen.Model.User;
 
@@ -46,22 +48,25 @@ public class UserDAO {
 		try {
 			Connection con = DBconnection.getConnection();
 			
-			String query = "SELECT * FROM users WHERE user_email= ? AND user_password = ?";
+			String query = "SELECT * FROM users WHERE user_email= ?";
 			
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setString(1, email);
-			ps.setString(2, password);
 			
 			ResultSet rs = ps.executeQuery();
 			
 			if(rs.next()) {
 				user = new User();
+				String storedHash = rs.getString("user_password");
 				
+				if(BCrypt.checkpw(password, storedHash)) {
+				user = new User();
 				user.setUserId(rs.getInt("user_id"));
 				user.setUserName(rs.getString("user_name"));
 				user.setUserEmail(rs.getString("user_email"));
-				user.setUserPassword(rs.getString("user_password"));
+				//user.setUserPassword(rs.getString("user_password"));
 				user.setUserRole(rs.getString("user_role"));
+			}
 			}
 			con.close();
 			ps.close();
@@ -72,17 +77,22 @@ public class UserDAO {
 		return user;
 	}
 	
-	//Update User
-	public boolean updateUser(User user) {
-	boolean status =false;
-	String query = "UPDATE users SET user_name= ?,user_email = ?, user_password = ? WHERE user_ID = ?";
+	//Update User Profile Details (Name and Email only)
+	public boolean updateUserFields(int userId, String fieldName, String newValue) {
+		String columnName = "";
+		
+		if("name".equals(fieldName)) {
+			columnName = "user_name";
+		}else if("email".equals(fieldName)) {
+			columnName = "user_email";
+		}
+	boolean status = false;
+	String query = "UPDATE users SET "+columnName+" = ? WHERE user_id = ?";
 	
 	try(Connection con = DBconnection.getConnection();
 			PreparedStatement ps = con.prepareStatement(query)){
-		ps.setString(1, user.getUserName());
-		ps.setString(2, user.getUserEmail());
-		ps.setString(3, user.getUserPassword());
-		ps.setInt(4, user.getUserId());
+		ps.setString(1, newValue);
+		ps.setInt(2, userId);
 		
 		if(ps.executeUpdate() > 0) {
 			status = true;
@@ -92,6 +102,28 @@ public class UserDAO {
 		e.printStackTrace();
 	}
 	return status;
+	}
+	
+	//Get Hashed Password
+	
+	public String getStoredHashedPassword(int userId) {
+		String currentPW = "";
+		String query = "SELECT user_password FROM users WHERE user_id = ?";
+		try(Connection con = DBconnection.getConnection();
+				PreparedStatement ps = con.prepareStatement(query)){
+			
+			ps.setInt(1, userId);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				currentPW = rs.getString("user_password");
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return currentPW;
 	}
 	
 	//Update User Password
