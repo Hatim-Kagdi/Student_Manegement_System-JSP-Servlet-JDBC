@@ -12,22 +12,38 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet("/searchTeacher")
-public class SearchTeacherServlet extends HttpServlet{
-	
+public class SearchTeacherServlet extends HttpServlet {
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String query = req.getParameter("searchQuery");
-		
+		int page = 1;
+		int pageSize = 10;
+
+		if (req.getParameter("page") != null)
+			page = Integer.parseInt(req.getParameter("page"));
+		if (req.getParameter("pageSize") != null)
+			pageSize = Integer.parseInt(req.getParameter("pageSize"));
+
 		TeacherDAO dao = new TeacherDAO();
-		
+
 		List<Teacher> result;
-		
-		if(query == null  || query.trim().isEmpty()) {
-			result = dao.viewAllTeachers();
-		}else {
-			result = dao.searchTeacher(query);
+		int totalPages;
+		if (query == null || query.trim().isEmpty()) {
+			result = dao.getTeacherByPage(page, pageSize);
+			int totalRecords = dao.getAllTeachersCount();
+			totalPages = (int) Math.ceilDiv(totalRecords, pageSize);
+		} else {
+			result = dao.searchTeacher(query, page, pageSize);
+			int totalRecords = dao.getAllTeacherSearchCount(query);
+			totalPages = (int) Math.ceilDiv(totalRecords, pageSize);
 		}
 		req.setAttribute("teacherList", result);
+		req.setAttribute("totalPages", totalPages);
+		req.setAttribute("currentPage", page);
+		req.setAttribute("pageSize", pageSize);
+		req.setAttribute("searchQuery", query);
+
 		req.getRequestDispatcher("/Teacher/viewTeacher.jsp").forward(req, resp);
 	}
 

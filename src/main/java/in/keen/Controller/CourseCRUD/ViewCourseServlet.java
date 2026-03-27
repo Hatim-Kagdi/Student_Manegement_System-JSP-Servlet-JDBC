@@ -18,16 +18,23 @@ public class ViewCourseServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
+		int page = 1;
+		int pageSize = 10;
+		
+		if(req.getParameter("page") != null) page = Integer.parseInt(req.getParameter("page"));
+		if(req.getParameter("pageSize") != null) pageSize = Integer.parseInt(req.getParameter("pageSize"));
+		
 		//TO get data of Course
 		CourseDAO dao = new CourseDAO();
-		List<Course> course = dao.getAllCourses();
+		List<Course> course = dao.getCourseByPage(page, pageSize);
+		int totalRecords = dao.getAllCoursesCount();
+		int totalPages = (int) Math.ceilDiv(totalRecords, pageSize);
+		
 		req.setAttribute("courseList", course);
+		req.setAttribute("totalPages", totalPages);
+		req.setAttribute("currentPage", page);
+		req.setAttribute("pageSize", pageSize);
 		
-		
-		//To get data of Teacher
-		TeacherDAO tdao = new TeacherDAO();
-		List<Teacher> teacher = tdao.viewAllTeachers();
-		req.setAttribute("teacherList", teacher);
 		
 		req.getRequestDispatcher("Course/viewCourses.jsp").forward(req, resp);
 	}

@@ -19,22 +19,31 @@ public class SearchCourseServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String query = req.getParameter("searchQuery");
+		int page = 1;
+		int pageSize = 10;
+		
+		if(req.getParameter("page") != null) page = Integer.parseInt(req.getParameter("page"));
+		if(req.getParameter("pageSize") != null) pageSize = Integer.parseInt(req.getParameter("pageSize"));
 		
 		CourseDAO dao = new CourseDAO();
-		TeacherDAO tdao = new TeacherDAO();
 		
 		List<Course> result;
-		
-		
+		int totalPages;
 		if(query == null || query.trim().isEmpty()) {
-			result = dao.getAllCourses();
+			result = dao.getCourseByPage(page, pageSize);
+			int totalRecords = dao.getAllCoursesCount();
+			totalPages = (int) Math.ceilDiv(totalRecords, pageSize);
 		}else {
-			result = dao.searchCourse(query);
+			result = dao.searchCourse(query, page, pageSize);
+			int totalRecords = dao.getSearchedCoursesCount(query);
+			totalPages = (int) Math.ceilDiv(totalRecords, pageSize);
 		}
-		List<Teacher> tList = tdao.viewAllTeachers();
 		
 		req.setAttribute("courseList", result);
-		req.setAttribute("teacherList", tList);
+		req.setAttribute("pageSize", pageSize);
+		req.setAttribute("searchQuery", query);
+		req.setAttribute("currentPage", page);
+		req.setAttribute("totalPages", totalPages);
 		req.getRequestDispatcher("/Course/viewCourses.jsp").forward(req, resp);
 	}
 }
