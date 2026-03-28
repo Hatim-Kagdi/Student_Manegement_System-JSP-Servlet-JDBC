@@ -2,6 +2,8 @@ package in.keen.Controller.TeacherCRUD;
 
 import java.io.IOException;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import in.keen.DAO.TeacherDAO;
 import in.keen.DAO.UserDAO;
 import in.keen.Model.Teacher;
@@ -19,6 +21,8 @@ public class AddTeacherServlet extends HttpServlet{
 		String name = req.getParameter("name");
 		String email = req.getParameter("email");
 		String department = req.getParameter("department");
+		String plainTextPW = "teacher";
+		String hashedPW = BCrypt.hashpw(plainTextPW, BCrypt.gensalt());
 		
 		Teacher teacher = new Teacher();
 		teacher.setTeacherName(name);
@@ -28,7 +32,7 @@ public class AddTeacherServlet extends HttpServlet{
 		User user = new User();
 		user.setUserName(name);
 		user.setUserEmail(email);
-		user.setUserPassword("teacher");
+		user.setUserPassword(hashedPW);
 		user.setUserRole("teacher");
 		
 		UserDAO udao = new UserDAO();

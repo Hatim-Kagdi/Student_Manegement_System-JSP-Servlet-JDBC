@@ -5,8 +5,14 @@ public class Course {
 	private String courseName;
 	private int teacherId;
 	private String teacherName;
+	private String teacherDepartment;
 	
-	
+	public String getTeacherDepartment() {
+		return teacherDepartment;
+	}
+	public void setTeacherDepartment(String teacherDepartment) {
+		this.teacherDepartment = teacherDepartment;
+	}
 	public String getTeacherName() {
 		return teacherName;
 	}

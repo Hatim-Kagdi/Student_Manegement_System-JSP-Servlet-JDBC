@@ -159,7 +159,7 @@ public class CourseDAO {
 	public List<Course> getAllCourseWithTeacher() {
 		List<Course> list = new ArrayList<>();
 
-		String query = "SELECT c.*,u.user_name AS teacher_name FROM courses c JOIN teachers t ON c.teacher_id = t.teachers_id JOIN users u ON t.user_id = u.user_id WHERE c.is_deleted = false";
+		String query = "SELECT c.*, t.teachers_department,u.user_name AS teacher_name FROM courses c JOIN teachers t ON c.teacher_id = t.teachers_id JOIN users u ON t.user_id = u.user_id WHERE c.is_deleted = false";
 
 		try (Connection con = DBconnection.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
 
@@ -170,6 +170,7 @@ public class CourseDAO {
 				c.setCourseId(rs.getInt("course_id"));
 				c.setCourseName(rs.getString("course_name"));
 				c.setTeacherName(rs.getString("teacher_name"));
+				c.setTeacherDepartment(rs.getString("teachers_department"));
 				list.add(c);
 			}
 

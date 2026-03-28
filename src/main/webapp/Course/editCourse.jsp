@@ -10,15 +10,16 @@
 <title>Update Course Details</title>
 </head>
 <body>
+
+	<h3>UPDATE COURSE DETAILS</h3>
+	<hr>
 	<%
 	Course course = (Course) request.getAttribute("course");
 	List<Teacher> teacher = (List<Teacher>) request.getAttribute("teacherList");
 	%>
-	<form action="<%=request.getContextPath()%>/updateCourse"
-		method="post">
+	<form action="<%=request.getContextPath()%>/updateCourse" method="post">
 
-		<input type="hidden" name="courseId"
-			value="<%=course.getCourseId()%>"><br>
+		<input type="hidden" name="courseId" value="<%=course.getCourseId()%>"><br>
 		<br> Course Name: <select name="name" required>
 			<option value="" disabled
 				<%=(course.getCourseName() == null) ? "selected" : ""%>>--
@@ -26,7 +27,7 @@
 
 			<option value="Data Structures & Algorithms"
 				<%="Data Structures & Algorithms".equals(course.getCourseName()) ? "selected" : ""%>>
-				Data Structures & Algorithms (CS)</option>
+				Data Structures & Algorithms (Computer Science)</option>
 
 			<option value="Fluid Mechanics"
 				<%="Fluid Mechanics".equals(course.getCourseName()) ? "selected" : ""%>>
@@ -38,29 +39,28 @@
 
 			<option value="Machine Learning"
 				<%="Machine Learning".equals(course.getCourseName()) ? "selected" : ""%>>
-				Machine Learning (AI)</option>
+				Machine Learning (Artificial Intelligence)</option>
 
 			<option value="Microcontrollers"
 				<%="Microcontrollers".equals(course.getCourseName()) ? "selected" : ""%>>
-				Microcontrollers (Robotics)</option>
+				Microcontrollers (Automation & Robotics)</option>
 
 			<option value="Power Systems"
 				<%="Power Systems".equals(course.getCourseName()) ? "selected" : ""%>>
 				Power Systems (Electrical)</option>
-		</select> <br>
-		<br> Teacher Id : <select name="teacherId"
+		</select> <br> <br> Teacher Id : <select name="teacherId"
 			value="<%=course.getTeacherId()%>">
 			<%
 			for (Teacher t : teacher) {
 			%>
 			<option value="<%=t.getTeacherId()%>"
 				<%=(t.getTeacherId() == course.getTeacherId()) ? "selected" : ""%>>
-				<%=t.getTeacherName()%></option>
+				<%=t.getTeacherName()%> :
+				<%=t.getTeacherDepartment()%></option>
 			<%
 			}
 			%>
-		</select><br>
-		<br>
+		</select><br> <br>
 
 		<button value="submit">Update</button>
 
